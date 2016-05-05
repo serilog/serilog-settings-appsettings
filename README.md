@@ -1,2 +1,4 @@
 # serilog-settings-appsettings
-An &lt;appSettings> configuration reader for Serilog
+
+Currently migrating from serilog/serilog.
+
