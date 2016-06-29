@@ -9,6 +9,12 @@ namespace Serilog.Tests.AppSettings.Tests
 {
     public class AppSettingsTests
     {
+        static AppSettingsTests()
+        {
+            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE",
+                System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"..\..\..\..\app.config"));
+        }
+
         [Fact]
         public void EnvironmentVariableExpansionIsApplied()
         {
