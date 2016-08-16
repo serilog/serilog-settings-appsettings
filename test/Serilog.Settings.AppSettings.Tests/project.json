@@ -7,7 +7,8 @@
   },
   "buildOptions": {
     "keyFile": "../../assets/Serilog.snk",
-    "preserveCompilationContext": true
+    "preserveCompilationContext": true,
+    "copyToOutput": [ "app.config" ]
   },
   "frameworks": {
     "net4.5.2": {
@@ -16,8 +17,6 @@
       },
       "dependencies": {
         "Newtonsoft.Json": "7.0.1",
-        "Rx-Main": "2.2.5",
-        "xunit.runner.visualstudio": "2.1.0",
         "Serilog.Sinks.TextWriter": "2.0.0",
         "Serilog.Sinks.RollingFile": "2.0.0",
         "Serilog.Sinks.PeriodicBatching": "2.0.0",

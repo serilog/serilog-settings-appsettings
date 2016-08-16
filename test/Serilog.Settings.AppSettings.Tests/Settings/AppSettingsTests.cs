@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using Xunit;
 using Serilog.Events;
 using Serilog.Tests.Support;
@@ -11,8 +12,12 @@ namespace Serilog.Tests.AppSettings.Tests
     {
         static AppSettingsTests()
         {
-            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE",
-                System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"..\..\..\..\app.config"));
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var config = Path.GetFullPath(Path.Combine(basePath, "app.config"));
+            if (!File.Exists(config))
+                throw new InvalidOperationException($"Can't find app.config in {basePath}");
+
+            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", config);
         }
 
         [Fact]
