@@ -8,7 +8,7 @@
   "buildOptions": {
     "keyFile": "../../assets/Serilog.snk",
     "preserveCompilationContext": true,
-    "copyToOutput": [ "app.config" ]
+    "copyToOutput": [ "tests.config" ]
   },
   "frameworks": {
     "net4.5.2": {

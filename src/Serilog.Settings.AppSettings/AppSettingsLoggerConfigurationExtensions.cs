@@ -35,9 +35,11 @@ namespace Serilog
         /// <param name="settingPrefix">Prefix to use when reading keys in appSettings. If specified the value
         /// will be prepended to the setting keys and followed by :, for example "myapp" will use "myapp:serilog:minumum-level. If null
         /// no prefix is applied.</param>
+        /// <param name="filePath">Specify the path to an alternative .config file location. If the file does not exist it will be ignored.
+        /// By default, the current application's configuration file will be used.</param>
         /// <returns>An object allowing configuration to continue.</returns>
         public static LoggerConfiguration AppSettings(
-            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix = null)
+            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix = null, string filePath = null)
         {
             if (settingConfiguration == null) throw new ArgumentNullException(nameof(settingConfiguration));
             if (settingPrefix != null)
@@ -47,7 +49,7 @@ namespace Serilog
                 if (string.IsNullOrWhiteSpace(settingPrefix)) throw new ArgumentException("To use the default setting prefix, do not supply the settingPrefix parameter, instead pass the default null.");
             }
 
-            return settingConfiguration.Settings(new AppSettingsSettings(settingPrefix));
+            return settingConfiguration.Settings(new AppSettingsSettings(settingPrefix, filePath));
         }
     }
 }
