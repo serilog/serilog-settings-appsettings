@@ -11,8 +11,11 @@ namespace Serilog.Tests.AppSettings.Tests
     {
         static string GetConfigPath()
         {
+            const string testsConfig = "tests.config";
+            if (File.Exists(testsConfig))
+                return Path.GetFullPath(testsConfig);
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            return Path.GetFullPath(Path.Combine(basePath, "tests.config"));
+            return Path.GetFullPath(Path.Combine(basePath, testsConfig));
         }
 
         [Fact]
