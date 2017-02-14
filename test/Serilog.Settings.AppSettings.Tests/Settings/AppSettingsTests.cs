@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Configuration;
+using System.IO;
 using Xunit;
 using Serilog.Events;
 using Serilog.Tests.Support;
@@ -9,21 +9,28 @@ namespace Serilog.Tests.AppSettings.Tests
 {
     public class AppSettingsTests
     {
-        static AppSettingsTests()
+        static string GetConfigPath()
         {
-            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE",
-                System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"..\..\..\..\app.config"));
+            const string testsConfig = "tests.config";
+            if (File.Exists(testsConfig))
+                return Path.GetFullPath(testsConfig);
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            return Path.GetFullPath(Path.Combine(basePath, testsConfig));
+        }
+
+        [Fact]
+        public void TheTestConfigFileExists()
+        {
+            var config= GetConfigPath();
+            Assert.True(File.Exists(config), "Can't find the test configuration file");
         }
 
         [Fact]
         public void EnvironmentVariableExpansionIsApplied()
         {
-            // Make sure we have the expected key in the App.config
-            Assert.Equal("%PATH%", ConfigurationManager.AppSettings["serilog:enrich:with-property:Path"]);
-
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings() 
+                .ReadFrom.AppSettings(filePath: GetConfigPath()) 
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -40,18 +47,14 @@ namespace Serilog.Tests.AppSettings.Tests
             const string prefix1 = "custom1";
             const string prefix2 = "custom2";
 
-            // Make sure we have the expected keys in the App.config
-            Assert.Equal("Warning", ConfigurationManager.AppSettings[prefix1 + ":serilog:minimum-level"]);
-            Assert.Equal("Error", ConfigurationManager.AppSettings[prefix2 + ":serilog:minimum-level"]);
-
             var log1 = new LoggerConfiguration()
                 .WriteTo.Observers(o => { })
-                .ReadFrom.AppSettings(prefix1)
+                .ReadFrom.AppSettings(prefix1, filePath: GetConfigPath())
                 .CreateLogger();
 
             var log2 = new LoggerConfiguration()
                 .WriteTo.Observers(o => { })
-                .ReadFrom.AppSettings(prefix2)
+                .ReadFrom.AppSettings(prefix2, filePath: GetConfigPath())
                 .CreateLogger();
 
             Assert.False(log1.IsEnabled(LogEventLevel.Information));
@@ -65,25 +68,22 @@ namespace Serilog.Tests.AppSettings.Tests
         public void CustomPrefixCannotContainColon()
         {
             Assert.Throws<ArgumentException>(() =>
-                new LoggerConfiguration().ReadFrom.AppSettings("custom1:custom2"));
+                new LoggerConfiguration().ReadFrom.AppSettings("custom1:custom2", filePath: GetConfigPath()));
         }
 
         [Fact]
         public void CustomPrefixCannotBeSerilog()
         {
             Assert.Throws<ArgumentException>(() =>
-                new LoggerConfiguration().ReadFrom.AppSettings("serilog"));
+                new LoggerConfiguration().ReadFrom.AppSettings("serilog", filePath: GetConfigPath()));
         }
 
         [Fact]
         public void ThreadIdEnricherIsApplied()
         {
-            // Make sure we have the expected key in the App.config
-            Assert.NotNull(ConfigurationManager.AppSettings["serilog:enrich:WithThreadId"]);
-
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
+                .ReadFrom.AppSettings(filePath: GetConfigPath())
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -97,12 +97,9 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void MachineNameEnricherIsApplied()
         {
-            // Make sure we have the expected key in the App.config
-            Assert.NotNull(ConfigurationManager.AppSettings["serilog:enrich:WithMachineName"]);
-
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
+                .ReadFrom.AppSettings(filePath: GetConfigPath())
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -116,12 +113,9 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void EnrivonmentUserNameEnricherIsApplied()
         {
-            // Make sure we have the expected key in the App.config
-            Assert.NotNull(ConfigurationManager.AppSettings["serilog:enrich:WithEnvironmentUserName"]);
-
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
+                .ReadFrom.AppSettings(filePath: GetConfigPath())
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -135,12 +129,9 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void ProcessIdEnricherIsApplied()
         {
-            // Make sure we have the expected key in the App.config
-            Assert.NotNull(ConfigurationManager.AppSettings["serilog:enrich:WithProcessId"]);
-
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
+                .ReadFrom.AppSettings(filePath: GetConfigPath())
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -154,12 +145,9 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void LogContextEnricherIsApplied()
         {
-            // Make sure we have the expected key in the App.config
-            Assert.NotNull(ConfigurationManager.AppSettings["serilog:enrich:FromLogContext"]);
-
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
+                .ReadFrom.AppSettings(filePath: GetConfigPath())
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
