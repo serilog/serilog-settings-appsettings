@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.ComponentModel;
 using Serilog.Configuration;
 using Serilog.Settings.AppSettings;
 
@@ -23,6 +24,26 @@ namespace Serilog
     /// </summary>
     public static class AppSettingsLoggerConfigurationExtensions
     {
+        /// <summary>
+        /// Reads the &lt;appSettings&gt; element of App.config or Web.config, searching for for keys
+        /// that look like: <code>serilog:*</code>, which are used to configure
+        /// the logger. To add a sink, use a key like <code>serilog:write-to:File.path</code> for
+        /// each parameter to the sink's configuration method. To add an additional assembly
+        /// containing sinks, use <code>serilog:using</code>. To set the level use
+        /// <code>serilog:minimum-level</code>.
+        /// </summary>
+        /// <param name="settingConfiguration">Logger setting configuration.</param>
+        /// <param name="settingPrefix">Prefix to use when reading keys in appSettings. If specified the value
+        /// will be prepended to the setting keys and followed by :, for example "myapp" will use "myapp:serilog:minumum-level. If null
+        /// no prefix is applied.</param>
+        /// <returns>An object allowing configuration to continue.</returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static LoggerConfiguration AppSettings(
+            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix = null)
+        {
+            return AppSettings(settingConfiguration, settingPrefix, filePath: null);
+        }
+
         /// <summary>
         /// Reads the &lt;appSettings&gt; element of App.config or Web.config, searching for for keys
         /// that look like: <code>serilog:*</code>, which are used to configure
