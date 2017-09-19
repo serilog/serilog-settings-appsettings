@@ -39,7 +39,7 @@ namespace Serilog
         /// <returns>An object allowing configuration to continue.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static LoggerConfiguration AppSettings(
-            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix = null)
+            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix)
         {
             return AppSettings(settingConfiguration, settingPrefix, filePath: null);
         }
