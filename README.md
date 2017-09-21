@@ -121,7 +121,7 @@ and in XML
 ```xml
     <add key="serilog:minimum-level" value="Information" />
     <add key="serilog:minimum-level:override:Microsoft" value="Warning" />
-    <add key="serilog:minimum-level:override:Microsoft.AspNetCore.Mvc" value="Warning" />
+    <add key="serilog:minimum-level:override:Microsoft.AspNetCore.Mvc" value="Error" />
 ```
 
 
