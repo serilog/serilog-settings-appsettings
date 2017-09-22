@@ -104,7 +104,8 @@ For example, to add the property `Release` with the value `"1.2-develop"` to all
     <add key="serilog:enrich:with-property:Release" value="1.2-develop" />
 ```
 
-### Adding Minimum Level overrides
+### Adding minimum level overrides
+
 Since Serilog 2.1, [minimum level overrides](https://nblumhardt.com/2016/07/serilog-2-minimumlevel-override/) can be added to change the minimum level for some specific namespaces. This is done with the setting key `serilog:minimum-level:override:` followed by the *source context prefix*.
 
 For instance, the following are equivalent :
@@ -123,6 +124,5 @@ and in XML
     <add key="serilog:minimum-level:override:Microsoft" value="Warning" />
     <add key="serilog:minimum-level:override:Microsoft.AspNetCore.Mvc" value="Error" />
 ```
-
 
 See the [Serilog documentation](https://github.com/serilog/serilog/wiki/AppSettings) for further information.
