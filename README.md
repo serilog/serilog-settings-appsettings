@@ -50,13 +50,13 @@ Valid values are those defined in the `LogEventLevel` enumeration: `Verbose`, `D
 Sinks are added with the `serilog:write-to` key. The setting name matches the configuration method name that you'd use in code, so the following are equivalent:
 
 ```csharp
-    .WriteTo.LiterateConsole()
+    .WriteTo.Console()
 ```
 
 In XML:
 
 ```xml
-    <add key="serilog:write-to:LiterateConsole" />
+    <add key="serilog:write-to:Console" />
 ```
 
 **NOTE: When using `serilog:*` keys need to be unique.**
@@ -64,8 +64,8 @@ In XML:
 Sink assemblies must be specified using the `serilog:using` syntax. For example, to configure 
 
 ```csharp
-<add key="serilog:using:LiterateConsole" value="Serilog.Sinks.Literate" />
-<add key="serilog:write-to:LiterateConsole"/>
+<add key="serilog:using:Console" value="Serilog.Sinks.Console" />
+<add key="serilog:write-to:Console"/>
 ```
 
 If the sink accepts parameters, these are specified by appending the parameter name to the setting.
@@ -125,4 +125,6 @@ and in XML
     <add key="serilog:minimum-level:override:Microsoft.AspNetCore.Mvc" value="Error" />
 ```
 
-See the [Serilog documentation](https://github.com/serilog/serilog/wiki/AppSettings) for further information.
+### Filtering
+
+Filters can be specified using the _Serilog.Filters.Expressions_ package; see the [README](https://github.com/serilog/serilog-filters-expressions) there for more information.
