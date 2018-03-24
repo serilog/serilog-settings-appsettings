@@ -1,4 +1,5 @@
 echo "build: Build started"
+
 Push-Location $PSScriptRoot
 
 if(Test-Path .\artifacts) {
