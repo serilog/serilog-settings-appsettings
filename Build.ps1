@@ -1,5 +1,4 @@
 echo "build: Build started"
-
 Push-Location $PSScriptRoot
 
 if(Test-Path .\artifacts) {
@@ -23,8 +22,13 @@ foreach ($src in ls src/*) {
 
 	echo "build: Packaging project in $src"
 
-    & dotnet build -c Release --version-suffix=$buildSuffix -o ..\..\artifacts -f=net45
+    & dotnet build -c Release --version-suffix=$buildSuffix
 
+    if($suffix) {
+        & dotnet pack -c Release --include-source --no-build -o ..\..\artifacts --version-suffix=$suffix
+    } else {
+        & dotnet pack -c Release --include-source --no-build -o ..\..\artifacts
+    }
     if($LASTEXITCODE -ne 0) { exit 1 }    
 
     Pop-Location
