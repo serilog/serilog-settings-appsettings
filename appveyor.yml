@@ -1,7 +1,7 @@
 version: '{build}'
 skip_tags: true
 environment:
-  os: Visual Studio 201
+  os: Visual Studio 2017
 configuration: Release
 build_script:
 - ps: ./Build.ps1
