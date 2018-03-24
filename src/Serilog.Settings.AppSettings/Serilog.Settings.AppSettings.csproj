@@ -11,9 +11,9 @@
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>Serilog.Settings.AppSettings</PackageId>
     <PackageTags>serilog;xml</PackageTags>
-    <PackageIconUrl>http://serilog.net/images/serilog-configuration-nuget.png</PackageIconUrl>
-    <PackageProjectUrl>http://serilog.net</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <PackageIconUrl>https://serilog.net/images/serilog-configuration-nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/serilog/serilog-settings-appsettings</PackageProjectUrl>
+    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
   </PropertyGroup>
 
