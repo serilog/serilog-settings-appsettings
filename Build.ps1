@@ -1,4 +1,5 @@
 echo "build: Build started"
+os: Visual Studio 2017
 
 Push-Location $PSScriptRoot
 
