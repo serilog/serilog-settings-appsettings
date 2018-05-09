@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using Xunit;
 using Serilog.Events;
 using Serilog.Tests.Support;
 using Serilog.Context;
+using Xunit;
 
 namespace Serilog.Tests.AppSettings.Tests
 {

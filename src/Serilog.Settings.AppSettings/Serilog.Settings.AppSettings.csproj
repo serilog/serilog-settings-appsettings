@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>XML configuration (System.Configuration &lt;appSettings&gt;) support for Serilog.</Description>
+    <VersionPrefix>2.2.0</VersionPrefix>
+    <Authors>Serilog Contributors</Authors>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <AssemblyName>Serilog.Settings.AppSettings</AssemblyName>
+    <AssemblyOriginatorKeyFile>../../assets/Serilog.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageId>Serilog.Settings.AppSettings</PackageId>
+    <PackageTags>serilog;xml</PackageTags>
+    <PackageIconUrl>https://serilog.net/images/serilog-configuration-nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/serilog/serilog-settings-appsettings</PackageProjectUrl>
+    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.6.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System.Configuration" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Configuration.ConfigurationManager">
+      <Version>4.4.1</Version>
+    </PackageReference>
+  </ItemGroup>
+
+
+</Project>
