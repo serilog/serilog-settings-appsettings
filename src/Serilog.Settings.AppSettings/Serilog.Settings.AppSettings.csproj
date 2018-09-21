@@ -14,6 +14,8 @@
     <PackageIconUrl>https://serilog.net/images/serilog-configuration-nuget.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/serilog/serilog-settings-appsettings</PackageProjectUrl>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/serilog/serilog-settings-appsettings</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DelaySign>false</DelaySign>
