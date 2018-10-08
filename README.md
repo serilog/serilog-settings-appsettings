@@ -128,3 +128,15 @@ and in XML
 ### Filtering
 
 Filters can be specified using the _Serilog.Filters.Expressions_ package; see the [README](https://github.com/serilog/serilog-filters-expressions) there for more information.
+
+### Setting values from enumerations
+
+When configuring sink settings with values from enumerations, use the member name, without specifying the name of the enumeration.
+
+For example, to configure the `RollingInterval` of the [File Sink](https://github.com/serilog/serilog-sinks-file) to create a new log file per day, use `Day` instead of `RollingInterval.Day`:
+
+```xml
+    <add key="serilog:write-to:File.rollingInterval" value="Day"/>
+```
+
+If you specify the the name of the enumeration, you'll receive an error similar to `System.ArgumentException: Requested value 'RollingInterval.Day' was not found`
