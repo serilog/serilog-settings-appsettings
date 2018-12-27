@@ -151,15 +151,16 @@ Tag variables in configuration file as such: %property{PROP_NAME}
 For example, to add the property `LogPath` with the value `"C:\Logs"`:
 
 ```csharp
-	var propertyValuesDict = new Dictionary<string, string>();
+var propertyValuesDict = new Dictionary<string, string>();
 
-	propertyValuesDict.Add("LogPath", "C:\Logs");
-	
-	Log.Logger = new LoggerConfiguration()
-	.ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict).WriteTo.RollingFileAlternate(...)
-                .CreateLogger();
+propertyValuesDict.Add("LogPath", "C:\Logs");
+
+Log.Logger = new LoggerConfiguration()
+.ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
+.WriteTo.RollingFileAlternate(...)
+.CreateLogger();
 ```
 
 ```xml 
-    <add key="serilog:write-to:RollingFileAlternate.logDirectory" value="{LogPath}\Log.txt" />
+    <add key="serilog:write-to:RollingFileAlternate.logDirectory" value="%property{LogPath}\Log.txt" />
 ```
