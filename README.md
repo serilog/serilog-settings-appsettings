@@ -140,3 +140,26 @@ For example, to configure the `RollingInterval` of the [File Sink](https://githu
 ```
 
 If you specify the the name of the enumeration, you'll receive an error similar to `System.ArgumentException: Requested value 'RollingInterval.Day' was not found`
+
+### Variable substitution
+
+To pass in variables from C#:
+
+Pass in propertyValuesDict to method AppSettings.
+Tag variables in configuration file as such: %property{PROP_NAME}
+
+For example, to add the property `LogPath` with the value `"C:\Logs"`:
+
+```csharp
+	var propertyValuesDict = new Dictionary<string, string>();
+
+	propertyValuesDict.Add("LogPath", "C:\Logs");
+	
+	Log.Logger = new LoggerConfiguration()
+	.ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict).WriteTo.RollingFileAlternate(...)
+                .CreateLogger();
+```
+
+```xml 
+    <add key="serilog:write-to:RollingFileAlternate.logDirectory" value="{LogPath}\Log.txt" />
+```
