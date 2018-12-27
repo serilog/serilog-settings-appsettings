@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Serilog.Configuration;
 using Serilog.Debugging;
 
@@ -26,11 +27,13 @@ namespace Serilog.Settings.AppSettings
     {
         readonly string _filePath;
         readonly string _settingPrefix;
+        private readonly Dictionary<string, string> _propertyValuesDict;
 
-        public AppSettingsSettings(string settingPrefix = null, string filePath = null)
+        public AppSettingsSettings(string settingPrefix = null, string filePath = null, Dictionary<string, string> propertyValuesDict = null)
         {
             _filePath = filePath;
             _settingPrefix = settingPrefix == null ? "serilog:" : $"{settingPrefix}:serilog:";
+            _propertyValuesDict = propertyValuesDict ?? new Dictionary<string, string>();
         }
 
         public void Configure(LoggerConfiguration loggerConfiguration)
@@ -47,7 +50,7 @@ namespace Serilog.Settings.AppSettings
                     return;
                 }
 
-                var map = new ExeConfigurationFileMap {ExeConfigFilename = _filePath};
+                var map = new ExeConfigurationFileMap { ExeConfigFilename = _filePath };
                 var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
                 settings = config.AppSettings.Settings
                     .Cast<KeyValueConfigurationElement>()
@@ -63,9 +66,25 @@ namespace Serilog.Settings.AppSettings
                 .Where(k => k.Key.StartsWith(_settingPrefix))
                 .Select(k => new KeyValuePair<string, string>(
                     k.Key.Substring(_settingPrefix.Length),
-                    Environment.ExpandEnvironmentVariables(k.Value)));
+                    SubstituteVariables(k.Value, _propertyValuesDict)));
 
             loggerConfiguration.ReadFrom.KeyValuePairs(pairs);
+        }
+
+        private string SubstituteVariables(string value, Dictionary<string, string> propertyValuesDict)
+        {
+            var substitutedStr = Environment.ExpandEnvironmentVariables(value);
+            var matches = Regex.Matches(substitutedStr, @"\%property\{([^\}]+)\}");
+
+            foreach (Match match in matches)
+            {
+                if(!propertyValuesDict.ContainsKey(match.Groups[1].Value))
+                    throw new KeyNotFoundException($"Can not find match for property '{match.Groups[1].Value}' referenced in configuration file. Property must be passed in.");
+
+                substitutedStr = substitutedStr.Replace(match.Value, propertyValuesDict[match.Groups[1].Value]);
+            }
+
+            return substitutedStr;
         }
     }
 }

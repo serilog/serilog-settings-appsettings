@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Serilog.Configuration;
 using Serilog.Settings.AppSettings;
@@ -24,6 +25,26 @@ namespace Serilog
     /// </summary>
     public static class AppSettingsLoggerConfigurationExtensions
     {
+        /// <summary>
+        /// Reads the &lt;appSettings&gt; element of App.config or Web.config, searching for for keys
+        /// that look like: <code>serilog:*</code>, which are used to configure
+        /// the logger. To add a sink, use a key like <code>serilog:write-to:File.path</code> for
+        /// each parameter to the sink's configuration method. To add an additional assembly
+        /// containing sinks, use <code>serilog:using</code>. To set the level use
+        /// <code>serilog:minimum-level</code>.
+        /// </summary>
+        /// <param name="settingConfiguration">Logger setting configuration.</param>
+        /// <param name="settingPrefix">Prefix to use when reading keys in appSettings. If specified the value
+        /// will be prepended to the setting keys and followed by :, for example "myapp" will use "myapp:serilog:minumum-level. If null
+        /// no prefix is applied.</param>
+        /// <param name="propertyValuesDict">Defines properties and their values. Properties can be referenced in app settings by '%property{PROP_NAME}'</param>
+        /// <returns>An object allowing configuration to continue.</returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static LoggerConfiguration AppSettings(
+            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix, Dictionary<string, string> propertyValuesDict)
+        {
+            return AppSettings(settingConfiguration, settingPrefix, filePath: null, propertyValuesDict: propertyValuesDict);
+        }
         /// <summary>
         /// Reads the &lt;appSettings&gt; element of App.config or Web.config, searching for for keys
         /// that look like: <code>serilog:*</code>, which are used to configure
@@ -58,9 +79,10 @@ namespace Serilog
         /// no prefix is applied.</param>
         /// <param name="filePath">Specify the path to an alternative .config file location. If the file does not exist it will be ignored.
         /// By default, the current application's configuration file will be used.</param>
+        /// <param name="propertyValuesDict">Defines properties and their values. Properties can be referenced in app settings by '%property{PROP_NAME}'</param>
         /// <returns>An object allowing configuration to continue.</returns>
         public static LoggerConfiguration AppSettings(
-            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix = null, string filePath = null)
+            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix = null, string filePath = null, Dictionary<string, string> propertyValuesDict = null)
         {
             if (settingConfiguration == null) throw new ArgumentNullException(nameof(settingConfiguration));
             if (settingPrefix != null)
@@ -70,7 +92,7 @@ namespace Serilog
                 if (string.IsNullOrWhiteSpace(settingPrefix)) throw new ArgumentException("To use the default setting prefix, do not supply the settingPrefix parameter, instead pass the default null.");
             }
 
-            return settingConfiguration.Settings(new AppSettingsSettings(settingPrefix, filePath));
+            return settingConfiguration.Settings(new AppSettingsSettings(settingPrefix, filePath, propertyValuesDict));
         }
     }
 }
