@@ -77,7 +77,7 @@ If the sink accepts parameters, these are specified by appending the parameter n
 In XML:
 
 ```xml
-    <add key="serilog:write-to:RollingFile.pathFormat" value="C:\Logs\myapp-{Date}.txt" />
+    <add key="serilog:write-to:RollingFile.path" value="C:\Logs\myapp-{Date}.txt" />
     <add key="serilog:write-to:RollingFile.retainedFileCountLimit" value="10" />
 ```
 
