@@ -71,14 +71,14 @@ Sink assemblies must be specified using the `serilog:using` syntax. For example,
 If the sink accepts parameters, these are specified by appending the parameter name to the setting.
 
 ```csharp
-    .WriteTo.RollingFile(@"C:\Logs\myapp-{Date}.txt", retainedFileCountLimit: 10)
+    .WriteTo.File(@"C:\Logs\myapp-{Date}.txt", retainedFileCountLimit: 10)
 ```
 
 In XML:
 
 ```xml
-    <add key="serilog:write-to:RollingFile.pathFormat" value="C:\Logs\myapp-{Date}.txt" />
-    <add key="serilog:write-to:RollingFile.retainedFileCountLimit" value="10" />
+    <add key="serilog:write-to:File.path" value="C:\Logs\myapp-{Date}.txt" />
+    <add key="serilog:write-to:File.retainedFileCountLimit" value="10" />
 ```
 
 Any environment variables specified in a setting value (e.g. `%TEMP%`) will be expanded appropriately when read.
