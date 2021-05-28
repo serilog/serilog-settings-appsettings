@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Serilog.Events;
 using Serilog.Tests.Support;
@@ -28,9 +29,14 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void EnvironmentVariableExpansionIsApplied()
         {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings(filePath: GetConfigPath()) 
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict) 
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -39,6 +45,54 @@ namespace Serilog.Tests.AppSettings.Tests
             Assert.NotNull(evt);
             Assert.NotEmpty((string)evt.Properties["Path"].LiteralValue());
             Assert.NotEqual("%PATH%", evt.Properties["Path"].LiteralValue());
+        }
+
+        [Fact]
+        public void PropertySubstitutionIsApplied()
+        {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
+            LogEvent evt = null;
+            var log = new LoggerConfiguration()
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
+                .WriteTo.Sink(new DelegatingSink(e => evt = e))
+                .CreateLogger();
+
+            log.Information("Has a PropertySubstitution property with value passed in from caller");
+
+            Assert.NotNull(evt);
+            Assert.NotEmpty((string)evt.Properties["PropertySubstitution"].LiteralValue());
+            Assert.Equal("a and b", evt.Properties["PropertySubstitution"].LiteralValue());
+        }
+
+        [Fact]
+        public void PropertySubstitutionIsNotNecessary()
+        {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
+            LogEvent evt = null;
+            var log = new LoggerConfiguration()
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
+                .WriteTo.Sink(new DelegatingSink(e => evt = e))
+                .CreateLogger();
+
+            log.Information("Has a NoPropertySubstitution property with no substitutions");
+
+            Assert.NotNull(evt);
+            Assert.NotEmpty((string)evt.Properties["NoPropertySubstitution"].LiteralValue());
+            Assert.Equal("Nothing here", evt.Properties["NoPropertySubstitution"].LiteralValue());
+        }
+
+        [Fact]
+        public void PropertySubstitutionFailsIfNoValuesPassedIn()
+        {
+            Assert.Throws<KeyNotFoundException>(() => new LoggerConfiguration().ReadFrom.AppSettings(filePath: GetConfigPath()));
         }
 
         [Fact]
@@ -81,9 +135,14 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void ThreadIdEnricherIsApplied()
         {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings(filePath: GetConfigPath())
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -97,9 +156,14 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void MachineNameEnricherIsApplied()
         {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings(filePath: GetConfigPath())
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -113,9 +177,14 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void EnrivonmentUserNameEnricherIsApplied()
         {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings(filePath: GetConfigPath())
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -129,9 +198,14 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void ProcessIdEnricherIsApplied()
         {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings(filePath: GetConfigPath())
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
@@ -145,9 +219,14 @@ namespace Serilog.Tests.AppSettings.Tests
         [Fact]
         public void LogContextEnricherIsApplied()
         {
+            var propertyValuesDict = new Dictionary<string, string>();
+
+            propertyValuesDict.Add("prop1", "a");
+            propertyValuesDict.Add("prop2", "b");
+
             LogEvent evt = null;
             var log = new LoggerConfiguration()
-                .ReadFrom.AppSettings(filePath: GetConfigPath())
+                .ReadFrom.AppSettings(filePath: GetConfigPath(), propertyValuesDict: propertyValuesDict)
                 .WriteTo.Sink(new DelegatingSink(e => evt = e))
                 .CreateLogger();
 
