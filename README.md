@@ -140,3 +140,25 @@ For example, to configure the `RollingInterval` of the [File Sink](https://githu
 ```
 
 If you specify the the name of the enumeration, you'll receive an error similar to `System.ArgumentException: Requested value 'RollingInterval.Day' was not found`
+
+### Destructuring
+
+```csharp
+
+LoggerConfiguration
+    .Destructure.ToMaximumDepth(maximumDestructuringDepth: 3)
+    .Destructure.ToMaximumStringLength(maximumStringLength: 3)
+    .Destructure.ToMaximumCollectionCount(maximumCollectionCount: 3)
+    .Destructure.AsScalar(typeof(System.Version))
+    .Destructure.With(new CustomPolicy());
+```
+
+and in XML
+
+```xml
+<add key="serilog:destructure:ToMaximumDepth.maximumDestructuringDepth" value="3" />
+<add key="serilog:destructure:ToMaximumStringLength.maximumStringLength" value="3" />
+<add key="serilog:destructure:ToMaximumCollectionCount.maximumCollectionCount" value="3" />
+<add key="serilog:destructure:AsScalar.scalarType" value="System.Version" />
+<add key="serilog:destructure:With.policy" value="My.CustomPolicy, MyAssembly, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+```
