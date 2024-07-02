@@ -39,7 +39,7 @@ namespace Serilog
         /// <returns>An object allowing configuration to continue.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static LoggerConfiguration AppSettings(
-            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix)
+            this LoggerSettingsConfiguration settingConfiguration, string? settingPrefix)
         {
             return AppSettings(settingConfiguration, settingPrefix, filePath: null);
         }
@@ -60,10 +60,10 @@ namespace Serilog
         /// By default, the current application's configuration file will be used.</param>
         /// <returns>An object allowing configuration to continue.</returns>
         public static LoggerConfiguration AppSettings(
-            this LoggerSettingsConfiguration settingConfiguration, string settingPrefix = null, string filePath = null)
+            this LoggerSettingsConfiguration settingConfiguration, string? settingPrefix = null, string? filePath = null)
         {
-            if (settingConfiguration == null) throw new ArgumentNullException(nameof(settingConfiguration));
-            if (settingPrefix != null)
+            if (settingConfiguration is null) throw new ArgumentNullException(nameof(settingConfiguration));
+            if (settingPrefix is not null)
             {
                 if (settingPrefix.Contains(":")) throw new ArgumentException("Custom setting prefixes cannot contain the colon (:) character.");
                 if (settingPrefix == "serilog") throw new ArgumentException("The value \"serilog\" is not a permitted setting prefix. To use the default, do not specify a custom prefix at all.");
