@@ -24,18 +24,18 @@ namespace Serilog.Settings.AppSettings
 {
     class AppSettingsSettings : ILoggerSettings
     {
-        readonly string _filePath;
+        readonly string? _filePath;
         readonly string _settingPrefix;
 
-        public AppSettingsSettings(string settingPrefix = null, string filePath = null)
+        public AppSettingsSettings(string? settingPrefix = null, string? filePath = null)
         {
             _filePath = filePath;
-            _settingPrefix = settingPrefix == null ? "serilog:" : $"{settingPrefix}:serilog:";
+            _settingPrefix = settingPrefix is null ? "serilog:" : $"{settingPrefix}:serilog:";
         }
 
         public void Configure(LoggerConfiguration loggerConfiguration)
         {
-            if (loggerConfiguration == null) throw new ArgumentNullException(nameof(loggerConfiguration));
+            if (loggerConfiguration is null) throw new ArgumentNullException(nameof(loggerConfiguration));
 
             IEnumerable<KeyValuePair<string, string>> settings;
 
@@ -56,7 +56,7 @@ namespace Serilog.Settings.AppSettings
             else
             {
                 settings = ConfigurationManager.AppSettings.AllKeys
-                    .Select(k => new KeyValuePair<string, string>(k, ConfigurationManager.AppSettings[k]));
+                    .Select(k => new KeyValuePair<string, string>(k, ConfigurationManager.AppSettings[k]!));
             }
 
             var pairs = settings
